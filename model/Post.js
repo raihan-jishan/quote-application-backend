@@ -1,13 +1,12 @@
 /*
-    title: PostType.js file, 
-    desc: simple file for schema types of postes .. 
-    date: 25 - 7 - 2023. 
-*/
-// require all modules
+    title: Post model  file , 
+    desc: this file for Post model of the mongodb.... 
+    date: 26 - 11 - 2023. 
+*/ 
 const mongoose = require("mongoose"); // require mongoose connector
 const { Schema } = require("mongoose");
 const NotesSchema = new Schema({
-  // user module
+  
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -20,23 +19,58 @@ const NotesSchema = new Schema({
     type: String,
     reqired: true,
   },
-  likes: {
-    type: Map,
-    of: Boolean,
-  },
-  comments: {
-    type: Array,
-    default: [],
-  },
+  likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    },
+  ],
+  comments: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+      text: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+      },
+      date:{
+        type: Date,
+        default: Date.now(), 
+      },
+    },
+  ],
   imageUrl: {
     type: String,
-    default:
-      "https://images.unsplash.com/photo-1517061493161-6f312d1c36d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG5ld3MlMjBwYXBlciUyMGJsdXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+    
+  },
+  tag: {
+    type: String,
+    // if these value provide accept the Post or return it...
+    enum: {
+      values: [
+        "motivational",
+        "Inspirational",
+        "Positive",
+        "Life",
+        "Music",
+        "Dreams",
+        "Billionaire",
+        "Legend",
+        "Alone",
+      ],
+      message: `{Value } is not supported!`,
+    },
   },
   date: {
     type: Date,
     default: Date.now,
   },
-});
-// export the module
+}); 
 module.exports = mongoose.model("notes", NotesSchema);

@@ -1,10 +1,9 @@
 /*
     title: User.js file, 
     desc; simple file for schema type of a perticular user.
-    date: 25 - 7 - 2023. 
+    date: 25 - 11 - 2023. 
     */
-// require all modules
-const mongoose = require("mongoose"); // require mongoose connector
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 // UsersSchema
 const UsersSchema = new Schema({
@@ -31,6 +30,5 @@ const UsersSchema = new Schema({
     default: Date.now,
   },
 });
-const User = mongoose.model("user", UsersSchema); // export the mdoule
-// module expors
+const User = mongoose.model("user", UsersSchema); 
 module.exports = User;

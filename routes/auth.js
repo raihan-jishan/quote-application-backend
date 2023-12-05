@@ -1,7 +1,7 @@
 /*
-    title: authentication.js file, 
+    title: authentication related working file. 
     desc: a main file for login / logout / register all proccess.. 
-    date: 23 - 7 - 2023. 
+    date: 23 - 11 - 2023. 
 */
 const express = require("express");
 const User = require("../model/User.js");
@@ -15,7 +15,7 @@ const JWT_SECRET = "hihellofrombangladesh";
 router.post(
   "/createaccount",
   [
-    body("name", "Enter a valid name").isLength({ min: 3 }),
+    body("name", "Enter a valid name").isLength({ min: 5 }),
     body("email", "Enter a valid a email").isEmail(),
     body("password", "Password must be atleast 5 charector").isLength({
       min: 5,
@@ -38,25 +38,23 @@ router.post(
           error: "Sorry a User with teh email already exist. ",
         });
       }
-      // secPass variable
       const salt = await bcrypt.genSalt(10);
       const secPassword = await bcrypt.hash(req.body.password, salt);
-      // user awilt check...
+      // create a user 
       user = await User.create({
         name: req.body.name,
         password: secPassword,
         email: req.body.email,
-        imageUrl: req.body.imageUrl,
+        
       });
+      user.save();
       // data variables
       const data = {
         user: {
           id: user.id,
         },
-      };
-      // jwt auth token base works
+      }; 
       const authtoken = jwt.sign(data, JWT_SECRET);
-      //    res Json
       success = true;
       res.json({ success, authtoken });
     } catch (error) {
